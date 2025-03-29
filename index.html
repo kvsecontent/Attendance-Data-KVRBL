@@ -541,7 +541,7 @@
         @media (max-width: 768px) {
             .container {
                 max-width: 100%;
-                margin: 0;
+                margin: 0 auto;
                 border-radius: 0;
                 border-left: none;
                 border-right: none;
@@ -613,13 +613,14 @@
         @media (max-width: 600px) {
             body {
                 padding: 10px;
-text-align: center;
+                text-align: center;
             }
             
             .container {
                 padding: 0;
                 border-radius: 0;
-                margin: 0 -10px;
+                margin: 0 auto;
+                width: 100%;
             }
             
             .header h1 {
@@ -1159,7 +1160,7 @@ text-align: center;
         });
         
         // API URL for backend
-        const API_BASE_URL = 'https://attendance-data-kvrbl-api.onrender.com';
+        const API_BASE_URL = 'https://attendance-data-api.onrender.com';
         
         // Current month and year for attendance display
         let currentDisplayMonth = new Date().getMonth();
@@ -1374,7 +1375,7 @@ text-align: center;
                         statusDiv.textContent = 'Sunday';
                         dayCell.appendChild(statusDiv);
                     } else {
-                        // For empty days that aren't Sunday, show the day of week
+                        // For non-Sunday days with no data, show the day of week
                         const statusDiv = document.createElement('div');
                         statusDiv.className = 'status day-of-week';
                         statusDiv.textContent = dayName;
