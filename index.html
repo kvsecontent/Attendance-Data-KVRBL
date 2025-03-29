@@ -258,12 +258,6 @@
             color: #757575;
         }
         
-        .day-of-week {
-            background-color: #f0f0f0;
-            color: #555;
-            font-style: italic;
-        }
-        
         .calendar-day .time-status {
             font-size: 11px;
             margin-top: 3px;
@@ -541,7 +535,7 @@
         @media (max-width: 768px) {
             .container {
                 max-width: 100%;
-                margin: 0;
+                margin: 0 auto;
                 border-radius: 0;
                 border-left: none;
                 border-right: none;
@@ -613,12 +607,14 @@
         @media (max-width: 600px) {
             body {
                 padding: 10px;
+                text-align: center;
             }
             
             .container {
                 padding: 0;
                 border-radius: 0;
-                margin: 0 -10px;
+                margin: 0 auto;
+                width: 100%;
             }
             
             .header h1 {
@@ -633,15 +629,6 @@
             .student-info p strong {
                 width: 120px;
                 display: inline-block;
-            }
-            
-            .student-info p {
-                padding-left: 5px;
-            }
-            
-            .text-right {
-                text-align: left;
-                padding-left: 5px;
             }
             
             .signature {
@@ -715,7 +702,6 @@
             
             .student-info p {
                 font-size: 12px;
-                padding-left: 5px;
             }
             
             .student-info p strong {
@@ -924,7 +910,6 @@
             .on-time { color: #388e3c !important; }
             .sunday .status { color: #c62828 !important; background-color: #ffcdd2 !important; }
             .holiday .status { color: #2e7d32 !important; }
-            .day-of-week { color: #555 !important; background-color: #f0f0f0 !important; }
             
             /* Set page properties */
             @page {
@@ -1306,9 +1291,6 @@
                 // Determine if it's a Sunday from the date object
                 const date = new Date(monthData.year, monthData.month, day);
                 const isSunday = date.getDay() === 0;
-                const dayOfWeek = date.getDay();
-                const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-                const dayName = dayNames[dayOfWeek];
                 
                 // If it's a Sunday, add the sunday class
                 if (isSunday) {
@@ -1332,9 +1314,6 @@
                                        dayData.status.toLowerCase() === 'holiday' || 
                                        dayData.status.toLowerCase() === 'no-school'));
                     
-                    // Check if it has day-of-week status (blank field)
-                    const isDayOfWeek = dayData.status === 'day-of-week';
-                    
                     // If it's marked as Sunday in the data or it's actually a Sunday
                     if (isDataSunday || (dayData.status === 'no-school' && isSunday)) {
                         const statusDiv = document.createElement('div');
@@ -1348,14 +1327,7 @@
                         statusDiv.className = 'status no-school holiday';
                         statusDiv.textContent = 'Holiday';
                         dayCell.appendChild(statusDiv);
-                    }
-                    // If it's a blank field (day-of-week status)
-                    else if (isDayOfWeek || (dayData.status === '' || dayData.status == null)) {
-                        const statusDiv = document.createElement('div');
-                        statusDiv.className = 'status day-of-week';
-                        statusDiv.textContent = dayData.dayName || dayName;
-                        dayCell.appendChild(statusDiv);
-                    }
+                    } 
                     // Regular school day (present/absent)
                     else {
                         // Determine present/absent status
@@ -1381,12 +1353,6 @@
                         const statusDiv = document.createElement('div');
                         statusDiv.className = 'status no-school sunday';
                         statusDiv.textContent = 'Sunday';
-                        dayCell.appendChild(statusDiv);
-                    } else {
-                        // For non-Sunday days with no data, show the day of week
-                        const statusDiv = document.createElement('div');
-                        statusDiv.className = 'status day-of-week';
-                        statusDiv.textContent = dayName;
                         dayCell.appendChild(statusDiv);
                     }
                 }
@@ -1433,28 +1399,24 @@
                 // Check if it's a Sunday
                 const date = new Date(year, month, day);
                 const isSunday = date.getDay() === 0;
-                const dayOfWeek = date.getDay();
-                const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-                const dayName = dayNames[dayOfWeek];
-                
-                const dateDiv = document.createElement('div');
-                dateDiv.className = 'date';
-                dateDiv.textContent = day;
-                dayCell.appendChild(dateDiv);
                 
                 if (isSunday) {
                     dayCell.classList.add('sunday');
+                    
+                    const dateDiv = document.createElement('div');
+                    dateDiv.className = 'date';
+                    dateDiv.textContent = day;
+                    dayCell.appendChild(dateDiv);
                     
                     const statusDiv = document.createElement('div');
                     statusDiv.className = 'status no-school sunday';
                     statusDiv.textContent = 'Sunday';
                     dayCell.appendChild(statusDiv);
                 } else {
-                    // For non-Sunday days with no data, show the day of week
-                    const statusDiv = document.createElement('div');
-                    statusDiv.className = 'status day-of-week';
-                    statusDiv.textContent = dayName;
-                    dayCell.appendChild(statusDiv);
+                    const dateDiv = document.createElement('div');
+                    dateDiv.className = 'date';
+                    dateDiv.textContent = day;
+                    dayCell.appendChild(dateDiv);
                 }
                 
                 calendarElement.appendChild(dayCell);
@@ -1593,18 +1555,14 @@
                             for (let day = 1; day <= daysInMonth; day++) {
                                 if (!existingDays[day]) {
                                     const date = new Date(month.year, month.month, day);
-                                    const dayOfWeek = date.getDay();
-                                    const isSunday = dayOfWeek === 0;
-                                    const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-                                    const dayName = dayNames[dayOfWeek];
+                                    const isSunday = date.getDay() === 0;
                                     
                                     month.days.push({
                                         day: day,
-                                        isSchoolDay: false,
-                                        status: isSunday ? 'sunday' : 'day-of-week',
-                                        dayName: dayName,
+                                        isSchoolDay: !isSunday,
+                                        status: isSunday ? 'sunday' : 'no-school',
                                         isSunday: isSunday,
-                                        isHoliday: false
+                                        isHoliday: !isSunday
                                     });
                                 }
                             }
