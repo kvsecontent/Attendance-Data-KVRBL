@@ -1309,7 +1309,7 @@
                 const dayCell = document.createElement('div');
                 dayCell.className = 'calendar-day';
                 
-                // Determine if it's a Sunday from the date object
+                // Determine the actual day of week for this date
                 const date = new Date(monthData.year, monthData.month, day);
                 const isSunday = date.getDay() === 0;
                 const dayOfWeek = date.getDay();
@@ -1341,7 +1341,7 @@
                     // Check if it has day-of-week status (blank field)
                     const isDayOfWeek = dayData.status === 'day-of-week';
                     
-                    // FIX 2: If it's a Sunday (regardless of whether it's also a holiday), show as Sunday
+                    // If it's a Sunday (regardless of whether it's also a holiday), show as Sunday
                     if (isSunday || isDataSunday) {
                         const statusDiv = document.createElement('div');
                         statusDiv.className = 'status no-school sunday';
@@ -1351,7 +1351,6 @@
                     // If it's marked as a Holiday in the data (and not a Sunday)
                     else if (isHoliday) {
                         const statusDiv = document.createElement('div');
-                        // FIX 3: Use the same styling as Sunday
                         statusDiv.className = 'status no-school holiday';
                         statusDiv.textContent = 'Holiday';
                         dayCell.appendChild(statusDiv);
@@ -1362,7 +1361,7 @@
                     else if (isDayOfWeek || (dayData.status === '' || dayData.status == null)) {
                         const statusDiv = document.createElement('div');
                         statusDiv.className = 'status day-of-week';
-                        // FIX 1: Always use the calculated day name based on the actual date
+                        // Always use the correct day name calculated from the date
                         statusDiv.textContent = dayName;
                         dayCell.appendChild(statusDiv);
                     }
@@ -1396,7 +1395,6 @@
                         // For non-Sunday days with no data, show the day of week
                         const statusDiv = document.createElement('div');
                         statusDiv.className = 'status day-of-week';
-                        // FIX 1: Always use the calculated day name based on the actual date
                         statusDiv.textContent = dayName;
                         dayCell.appendChild(statusDiv);
                     }
@@ -1464,7 +1462,6 @@
                     // For non-Sunday days with no data, show the day of week
                     const statusDiv = document.createElement('div');
                     statusDiv.className = 'status day-of-week';
-                    // FIX 1: Use correct day name based on actual date
                     statusDiv.textContent = dayName;
                     dayCell.appendChild(statusDiv);
                 }
