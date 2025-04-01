@@ -1069,16 +1069,7 @@
                 
                 <div class="calendar-container">
                     <div class="calendar">
-                        <div class="calendar-header">Sun</div>
-                        <div class="calendar-header">Mon</div>
-                        <div class="calendar-header">Tue</div>
-                        <div class="calendar-header">Wed</div>
-                        <div class="calendar-header">Thu</div>
-                        <div class="calendar-header">Fri</div>
-                        <div class="calendar-header">Sat</div>
-                        
-                        <!-- Calendar days will be inserted here -->
-                        <div id="calendarGrid"></div>
+                        <!-- Calendar will be generated completely by JavaScript -->
                     </div>
                 </div>
             </div>
@@ -1278,20 +1269,19 @@
             const daysInMonth = new Date(monthData.year, monthData.month + 1, 0).getDate();
             const firstDayOfMonth = new Date(monthData.year, monthData.month, 1).getDay();
             
-            // Update month title
-            const monthNames = ["January", "February", "March", "April", "May", "June",
-                                "July", "August", "September", "October", "November", "December"];
-            document.getElementById('currentMonth').textContent = `${monthNames[monthData.month]} ${monthData.year}`;
-            
-            // Clear calendar grid
+            // Clear the calendar completely and rebuild it
             const calendarElement = document.querySelector('.calendar');
-            const calendarHeaders = document.querySelectorAll('.calendar-header');
+            calendarElement.innerHTML = '';
             
-            // Remove all calendar days but keep headers
-            const calendarDays = document.querySelectorAll('.calendar-day');
-            calendarDays.forEach(day => day.remove());
+            // Add the day headers (Sun, Mon, Tue, etc.)
+            const dayHeaders = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            dayHeaders.forEach(header => {
+                const headerDiv = document.createElement('div');
+                headerDiv.className = 'calendar-header';
+                headerDiv.textContent = header;
+                calendarElement.appendChild(headerDiv);
+            });
             
-            // Create calendar cells
             // Add empty cells for days before the first day of the month
             for (let i = 0; i < firstDayOfMonth; i++) {
                 const emptyDay = document.createElement('div');
@@ -1309,7 +1299,7 @@
                 const dayCell = document.createElement('div');
                 dayCell.className = 'calendar-day';
                 
-                // Determine the actual day of week for this date
+                // Determine if it's a Sunday from the date object
                 const date = new Date(monthData.year, monthData.month, day);
                 const isSunday = date.getDay() === 0;
                 const dayOfWeek = date.getDay();
@@ -1361,7 +1351,6 @@
                     else if (isDayOfWeek || (dayData.status === '' || dayData.status == null)) {
                         const statusDiv = document.createElement('div');
                         statusDiv.className = 'status day-of-week';
-                        // Always use the correct day name calculated from the date
                         statusDiv.textContent = dayName;
                         dayCell.appendChild(statusDiv);
                     }
@@ -1419,13 +1408,18 @@
                                 "July", "August", "September", "October", "November", "December"];
             document.getElementById('currentMonth').textContent = `${monthNames[month]} ${year}`;
             
-            // Clear calendar grid
+            // Clear the calendar completely and rebuild it
             const calendarElement = document.querySelector('.calendar');
-            const calendarHeaders = document.querySelectorAll('.calendar-header');
+            calendarElement.innerHTML = '';
             
-            // Remove all calendar days but keep headers
-            const calendarDays = document.querySelectorAll('.calendar-day');
-            calendarDays.forEach(day => day.remove());
+            // Add the day headers (Sun, Mon, Tue, etc.)
+            const dayHeaders = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            dayHeaders.forEach(header => {
+                const headerDiv = document.createElement('div');
+                headerDiv.className = 'calendar-header';
+                headerDiv.textContent = header;
+                calendarElement.appendChild(headerDiv);
+            });
             
             // Add empty cells for days before the first day of the month
             for (let i = 0; i < firstDayOfMonth; i++) {
